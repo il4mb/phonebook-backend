@@ -4,21 +4,25 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const Person = require("./models/person");
+const path = require('path');
 
 morgan.token('body', (req) => {
     return req.method === 'POST' ? JSON.stringify(req.body) : '';
 });
 
 
-
+app.use(express.static('public'));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
-app.use(express.json());
+
 app.use(cors());
 
 
-app.get('/', (request, response) => {
-    response.send('<h1>Hello World!</h1>')
-})
+// Fallback route for React (to handle client-side routing)
+app.get('/', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+});
+
+app.use(express.json());
 
 app.get('/info', (request, response) => {
     const currentDate = new Date().toString();
@@ -91,7 +95,7 @@ app.post('/api/persons', async (request, response, next) => {
 
     person.save().then((p) => {
         response.json(p);
-    }).catch(err=> next(err))
+    }).catch(err => next(err))
 });
 
 // register end handler

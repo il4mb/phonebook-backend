@@ -1,0 +1,2 @@
+h1{color:green;font-style:italic}.notification{border:5px solid var(--theme-outline);border-radius:.3rem;color:var(--theme-text);font-size:18px;font-weight:600;margin-bottom:.3rem;padding:1rem;text-transform:capitalize}.notification.default{--theme-outline:#6e6e6e;--theme-text:#393939}.notification.danger{--theme-outline:#bc2424;--theme-text:#5e0404}.notification.success{--theme-outline:#07a74f;--theme-text:#043c1d}
+/*# sourceMappingURL=main.14677d5c.css.map*/
