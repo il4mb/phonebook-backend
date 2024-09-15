@@ -23,9 +23,23 @@ const personSchema = new mongoose.Schema({
         minLength: 3,
         required: true
     },
-    number: String,
-    date: { type: Date, default: Date.now() }
-})
+    number: {
+        type: String,
+        required: true,
+        validate: {
+            validator: function (v) {
+                return /^(\d{2,3})-\d{5,}$/.test(v);
+            },
+            message: props => `${props.value} is not a valid phone number! It should have 2-3 digits followed by a '-' and at least 5 digits.`
+        },
+        minLength: 8
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    }
+});
+
 
 personSchema.set('toJSON', {
     transform: (document, returnedObject) => {

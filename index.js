@@ -1,6 +1,7 @@
 require('dotenv').config()
 const morgan = require('morgan');
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const Person = require("./models/person");
 
@@ -8,8 +9,11 @@ morgan.token('body', (req) => {
     return req.method === 'POST' ? JSON.stringify(req.body) : '';
 });
 
+
+
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 app.use(express.json());
+app.use(cors());
 
 
 app.get('/', (request, response) => {
@@ -63,7 +67,7 @@ app.put('/api/persons/:id', (request, response, next) => {
         .catch(error => next(error))
 })
 
-app.post('/api/persons', async (request, response) => {
+app.post('/api/persons', async (request, response, next) => {
     const body = request.body
 
     if (!body.name || !body.number) {
@@ -87,7 +91,7 @@ app.post('/api/persons', async (request, response) => {
 
     person.save().then((p) => {
         response.json(p);
-    });
+    }).catch(err=> next(err))
 });
 
 // register end handler
@@ -99,6 +103,8 @@ app.use(unknownEndpoint);
 const errorHandler = (error, request, response, next) => {
     if (error.name === 'CastError') {
         return response.status(400).send({ error: 'malformatted id' })
+    } else if (error.name === 'ValidationError') {
+        return response.status(400).json({ error: error.message })
     }
     next(error)
 }
