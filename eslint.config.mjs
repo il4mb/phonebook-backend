@@ -1,12 +1,17 @@
 import globals from "globals";
-import js from '@eslint/js'
-import stylisticJs from '@stylistic/eslint-plugin-js'
+import js from '@eslint/js';
+import stylisticJs from '@stylistic/eslint-plugin-js';
 
 export default [
+  {
+    ignores: [
+      "public/**",
+      "**/public/**",
+    ],
+  },
   js.configs.recommended,
   {
     files: ["**/*.js"],
-    ignores: ["public/**/*"],
     plugins: {
       '@stylistic/js': stylisticJs
     },
@@ -34,6 +39,14 @@ export default [
         'error',
         'never'
       ],
+      'eqeqeq': 'error',
+      'no-trailing-spaces': 'error',
+      'object-curly-spacing': [
+        'error', 'always'
+      ],
+      'arrow-spacing': [
+        'error', { 'before': true, 'after': true },
+      ],
     },
   },
-]
+];
